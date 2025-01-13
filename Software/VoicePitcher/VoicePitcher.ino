@@ -29,9 +29,6 @@ volatile uint8_t outputSample = 128u;
 #################################################*/
 
 void setup() {
-  //Serial.begin(115200); 
-  //Serial.print("Base Pitch: ");
-  //Serial.println(TIMER_BASE_DIV);
   initPins();
   initMic();
   initSpeaker();
