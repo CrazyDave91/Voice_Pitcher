@@ -23,6 +23,7 @@ uint8_t sampleBuffer[PITCH_BUFFER_LEN] = {0};
 uint16_t inputPointer = 0;
 uint16_t outputPointer = 0;
 volatile uint8_t outputSample = 128u;
+bool continuousPitchMode = true;
 
 /*###############################################
               Initialization
@@ -32,6 +33,7 @@ void setup() {
   initPins();
   initMic();
   initSpeaker();
+  initPitchMode();
 }
 
 void initPins(void)
@@ -83,6 +85,12 @@ void initSpeaker(void)
   TIMSK2 = (1<<TOIE2);                        // Timer 2 OVF enable 
 }
 
+void initPitchMode(void)
+{
+  uint8_t poti = readAdcChannel1();
+  continuousPitchMode = (poti > 128u);
+}
+
 /*###############################################
             Main Loop & Algorithms
 #################################################*/
@@ -113,11 +121,25 @@ void setNewSampleRatesForMicAndSpeaker(uint8_t target)
   if(target >= 128u)
   {
     OCR0A = TIMER_BASE_DIV;
-    OCR1AL = TIMER_BASE_DIV + ((target - 128u) >> 3u);
+    if(continuousPitchMode)
+    {
+      OCR1AL = TIMER_BASE_DIV + ((target - 128u) >> 3u);
+    }
+    else
+    {
+      OCR1AL = TIMER_BASE_DIV << 1u;
+    }
   }
   else
   {
-    OCR0A = TIMER_BASE_DIV + ((127u - target) >> 3u);
+    if(continuousPitchMode)
+    {
+      OCR0A = TIMER_BASE_DIV + ((127u - target) >> 3u);
+    }
+    else
+    {
+      OCR0A = TIMER_BASE_DIV << 1u;
+    }
     OCR1AL = TIMER_BASE_DIV;
   }
 }
