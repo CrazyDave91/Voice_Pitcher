@@ -9,4 +9,8 @@ The core parts are listed in the BOM folder. All other parts are things i had ly
 - Some random jumper cables
 - The screws used are M3 maschine screws
 
+# Updates
+**20250325**: The pitcher now support two modes. Default Mode (knob on high pitch at startup), where the knob controls the pitch and Binary Mode (knob on low pitch at startup), where only one octave lower or higher can be selected. The mode is selected at startup depending on the knobs position and seperated by its half point.
+
+# Example Setup
 ![Voice Pitcher Assembly](Voice_Pitcher.jpg)
